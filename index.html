@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome Animation</title>
+  <style>
+    input{
+            width: 200px;
+            height: 35px;
+        }
+    table{
+        border-collapse: collapse;
+    }
+    tr,th,td{
+        border:2px solid #dddddd;
+        padding: 15px;
+    }
+  </style>
+</head>
+<body>
+    <input type="text" placeholder="first name" id="first" autocomplete="off" autocapitalize="onsubmit">
+    <input type="text" placeholder="last name" id="last" autocomplete="off" autocapitalize="onsubmit">
+    <input type="date" id="date">
+    <input type="email" placeholder="email" id="email" autocomplete="off">
+    <input type="tel" placeholder="phone number" id="num" autocomplete="off">
+    <input type="submit" onclick="details()">
+    <div id="table"><br><br><br><br>
+        <table>
+        <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Date of birth</th>
+        <th>email id</th>
+        <th>phone number</th>
+        </tr>
+        <td id="val1"></td>
+        <td id="val2"></td>
+        <td id="val3"></td>
+        <td id="val4"></td>
+        <td id="val5"></td>
+        <br><br>
+        </table>
+
+    </div>
+    <script>
+        function details()
+        {
+        let first = document.getElementById("first").value;
+        let last = document.getElementById("last").value;
+        let date = document.getElementById("date").value;
+        let email = document.getElementById("email").value;
+        let tel = document.getElementById("num").value;
+        if(!(tel in localStorage))
+        {
+            const userdetails = 
+            {
+                first_name :first,
+                last_name :last,
+                dob: date,
+                mail:email,
+                phn:tel
+            };
+            localStorage.setItem(tel,JSON.stringify(userdetails))
+            window.alert("successfully created")
+            document.getElementById("val1").innerHTML = first;
+            document.getElementById("val2").innerHTML = last;
+            document.getElementById("val3").innerHTML = date;
+            document.getElementById("val4").innerHTML = email;
+            document.getElementById("val5").innerHTML = tel;
+            document.getElementById("first").value = "";
+            document.getElementById("last").value = "";
+            document.getElementById("date").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("num").value = "";
+
+        }
+        else{
+            window.alert("user mobile number already exist")
+        }
+    }
+    </script>
+</body>
+</html>
