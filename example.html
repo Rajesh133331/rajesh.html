@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropdown Menu</title>
+    <style>
+        .a {
+            height: 30px;
+            width: 120px;
+            border: 1px solid white;
+            padding: 10px;
+            background-color: antiquewhite;
+            cursor: pointer;
+        }
+        a {
+            text-decoration: none;
+            cursor: pointer;
+        }
+        #main {
+            margin-left: 50px;
+            position: relative;
+        }
+        #con {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            background-color: antiquewhite;
+            padding: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body onclick="fun1()">
+    <div id="main" onclick="event.stopPropagation();">
+        <a href="#" onclick="fun(event)"><h3>HOME</h3></a>
+        <div id="con" class="container">
+            <div class="a">DEPARTMENTS</div>
+            <div class="a">EXAMINATION</div>
+            <div class="a">RESULTS</div>
+        </div>
+    </div>
+    <script>
+        function fun(event) {
+            event.preventDefault();
+            let menu = document.getElementById("con");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        function fun1() {
+            document.getElementById("con").style.display = "none";
+        }
+    </script>
+</body>
+</html>

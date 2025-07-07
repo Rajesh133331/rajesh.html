@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        h3 {
+            text-align: center;
+            color: #4CAF50;
+            margin-top: 20px;
+            font-size: 36px;
+        }
+
+        label {
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        select {
+            width: 250px;
+            height: 35px;
+            font-size: 16px;
+            padding: 8px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 2px solid #4CAF50;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        select:focus {
+            border-color: #FF6347;
+            box-shadow: 0 0 8px rgba(255, 99, 71, 0.6);
+            outline: none;
+        }
+
+        option {
+            font-size: 16px;
+            color: #333;
+        }
+
+        option:hover {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        #gunturselect, #palnaduselect, #bapatlaselect {
+            display: none;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 200px;
+            margin: 20px auto;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        h5 {
+            text-align: center;
+            color: #28a745;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 60%;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>KNOW YOUR MLA</h3>
+        <div class="section">
+            <label>SELECT DISTRICT NAME:</label><br><br>
+            <select id="district" onchange="district()">
+                <option selected disabled>SELECT DISTRICT</option>
+                <option value="GUNTUR">GUNTUR</option>
+                <option value="PALNADU">PALNADU</option>
+                <option value="BAPATLA">BAPATLA</option>
+            </select><br><br>
+        </div>
+
+        <div id="gunturselect" class="section">
+            <label>SELECT CONSTITUENCY NAME:</label><br><br>
+            <select id="gunturconstituency">
+                <option>SELECT CONSTITUENCY NAME</option>
+                <option value="gunturwest">GUNTUR-WEST</option>
+                <option value="guntureast">GUNTUR-EAST</option>
+                <option value="prathipadu">PRATHIPADU-SC</option>
+                <option value="thadikonda">THADIKONDA-SC</option>
+                <option value="ponnur">PONNUR</option>
+                <option value="mangalagiri">MANGALAGIRI</option>
+                <option value="tenali">TENALI</option>
+            </select>
+        </div>
+
+        <div id="palnaduselect" class="section">
+            <label>SELECT CONSTITUENCY NAME:</label><br><br>
+            <select id="palnadconstituency">
+                <option>SELECT CONSTITUENCY NAME</option>
+                <option value="chilakaluripet">CHILAKALURIPETA</option>
+                <option value="narasaraopet">NARASARAOPETA</option>
+                <option value="peddakurapadu">PEDDAKURAPADU</option>
+                <option value="marcherla">MARCHERLA</option>
+                <option value="guruzala">GURUZALA</option>
+                <option value="sattenapalli">SATTENAPALLI</option>
+                <option value="vinukonda">VINUKONDA</option>
+            </select>
+        </div>
+
+        <div id="bapatlaselect" class="section">
+            <label>SELECT CONSTITUENCY NAME:</label><br><br>
+            <select id="bapatlaconstituency">
+                <option>SELECT CONSTITUENCY NAME</option>
+                <option value="bapatla">BAPATLA</option>
+                <option value="parchur">PARCHUR</option>
+                <option value="chirala">CHIRALA</option>
+            </select>
+        </div><br><br>
+
+        <button type="button" onclick="mlaname()">SUBMIT</button>
+        <h5 id="name"></h5>
+    </div>
+
+    <script>
+        function district() {
+            let districtvalue = document.getElementById("district").value;
+
+            // Hide all constituency divs initially
+            document.getElementById("gunturselect").style.display = "none";
+            document.getElementById("palnaduselect").style.display = "none";
+            document.getElementById("bapatlaselect").style.display = "none";
+
+            // Show the correct constituency div based on selected district
+            if (districtvalue === "GUNTUR") {
+                document.getElementById("gunturselect").style.display = "block";
+            } else if (districtvalue === "PALNADU") {
+                document.getElementById("palnaduselect").style.display = "block";
+            } else if (districtvalue === "BAPATLA") {
+                document.getElementById("bapatlaselect").style.display = "block";
+            }
+        }
+
+        function mlaname() {
+            let districtvalue = document.getElementById("district").value;
+            let name = "";
+
+            if (districtvalue === "GUNTUR") {
+                let gunturConstituency = document.getElementById("gunturconstituency").value;
+                switch(gunturConstituency) {
+                    case "gunturwest":
+                        name = "GALLA MADHAVI";
+                        break;
+                    case "guntureast":
+                        name = "MOHAMMED NASEER";
+                        break;
+                    case "prathipadu":
+                        name = "BURLA RAMANJANEYULU";
+                        break;
+                    case "thadikonda":
+                        name = "TENALI SRAVAN KUMAR";
+                        break;
+                    case "ponnur":
+                        name = "DULLIPALLA NARENDRA";
+                        break;
+                    case "mangalagiri":
+                        name = "NARA LOKESH";
+                        break;
+                    case "tenali":
+                        name = "NADENDLA MANOHAR";
+                        break;
+                    default:
+                        name = "No MLA found for this constituency";
+                        break;
+                }
+            } else if (districtvalue === "PALNADU") {
+                let palnaduConstituency = document.getElementById("palnadconstituency").value;
+                switch(palnaduConstituency) {
+                    case "chilakaluripet":
+                        name = "PRATHIPATI PULLA RAO";
+                        break;
+                    case "narasaraopet":
+                        name = "CHADALAVADA ARAVIND BABU";
+                        break;
+                    case "peddakurapadu":
+                        name = "BHASYAM PRAVEEN";
+                        break;
+                    case "marcherla":
+                        name = "JULAKANTI BRAHMANANDA REDDY";
+                        break;
+                    case "guruzala":
+                        name = "YARAPATHINENI SRINIVASARAO";
+                        break;
+                    case "sattenapalli":
+                        name = "KANNA LAKSHMINARAYANA";
+                        break;
+                    case "vinukonda":
+                        name = "G.V.ANJANEYULU";
+                        break;
+                    default:
+                        name = "No MLA found for this constituency";
+                        break;
+                }
+            } else if (districtvalue === "BAPATLA") {
+                let bapatlaConstituency = document.getElementById("bapatlaconstituency").value;
+                switch(bapatlaConstituency) {
+                    case "bapatla":
+                        name = "VEGESANA NARENDRA VARMA RAJU";
+                        break;
+                    case "parchur":
+                        name = "YELURI SAMBASIVA RAO";
+                        break;
+                    case "chirala":
+                        name = "MADDULURI MALAKONDAIAH";
+                        break;
+                    default:
+                        name = "No MLA found for this constituency";
+                        break;
+                }
+            }
+            document.getElementById("name").innerHTML = name;
+        }
+    </script>
+</body>
+</html>
+ 

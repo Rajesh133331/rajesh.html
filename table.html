@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Document</title>
+  <style>
+    body {
+      margin-top: 200px;
+      margin-left: 500px;
+      font-family: Arial, sans-serif;
+    }
+
+    .input-container {
+      position: relative;
+      width: 220px;
+      margin-bottom: 15px;
+      animation: fadeSlideIn 1s ease forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    input {
+      width: 100%;
+      height: 30px;
+      padding-right: 30px; /* space for eye icon */
+      box-sizing: border-box;
+    }
+
+    input::placeholder {
+      text-align: center;
+    }
+
+    .eye-icon {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+    }
+
+    @keyframes fadeSlideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .input-container:nth-of-type(1) { animation-delay: 0.1s; }
+    .input-container:nth-of-type(2) { animation-delay: 0.3s; }
+    .input-container:nth-of-type(3) { animation-delay: 0.5s; }
+    .input-container:nth-of-type(4) { animation-delay: 0.7s; }
+  </style>
+</head>
+<body>
+  <form action="alert.html" onsubmit="create(); return false;">
+    <div class="input-container">
+      <input type="email" id="email" placeholder="Enter email" required autocomplete="off">
+    </div>
+    <div class="input-container">
+      <input type="password" id="password" placeholder="Enter password" required>
+      <img src="https://cdn-icons-png.flaticon.com/512/709/709612.png" class="eye-icon" onclick="toggleVisibility('password', this)">
+    </div>
+    <div class="input-container">
+      <input type="password" id="repassword" placeholder="Re-enter password" required>
+      <img src="https://cdn-icons-png.flaticon.com/512/709/709612.png" class="eye-icon" onclick="toggleVisibility('repassword', this)">
+    </div>
+    <div class="input-container">
+      <input type="submit" value="Submit">
+    </div>
+  </form><br><br>
+
+  <a href="delete.html" style="text-decoration: none;" target="_self">Delete account</a> |
+  <a href="login.html" style="text-decoration: none;" target="_self">Already have account</a>
+
+  <script>
+    function toggleVisibility(fieldId, icon) {
+      const field = document.getElementById(fieldId);
+      if (field.type === "password") {
+        field.type = "text";
+        icon.src = "https://cdn-icons-png.flaticon.com/512/709/709699.png"; // eye-off icon
+      } else {
+        field.type = "password";
+        icon.src = "https://cdn-icons-png.flaticon.com/512/709/709612.png"; // eye icon
+      }
+    }
+
+    function create() {
+      const email = document.getElementById("email").value;
+      const pass1 = document.getElementById("password").value;
+      const pass2 = document.getElementById("repassword").value;
+
+      if (localStorage.getItem(email)) {
+        alert("Already have an account with this email ID");
+      } else if (pass1 === pass2 && email !== "" && pass1 !== "") {
+        localStorage.setItem(email, pass1);
+        alert("Successfully created account");
+        window.location.href = "alert.html";
+      } else {
+        alert("Re-enter password properly");
+      }
+    }
+  </script>
+</body>
+</html>

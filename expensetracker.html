@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Indian Expense Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f8fafc, #eef2f7);
+      color: #333;
+      padding: 20px;
+    }
+    .page {
+      max-width: 600px;
+      margin: auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #2f3e46;
+      margin-bottom: 10px;
+    }
+    p.subheading {
+      text-align: center;
+      color: #555;
+      margin-bottom: 25px;
+    }
+    section {
+      margin-bottom: 30px;
+    }
+    .status-box {
+      display: flex;
+      justify-content: space-between;
+      background: #e7f5ff;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+    .status-box div {
+      flex: 1;
+      text-align: center;
+    }
+    .status-box div h4 {
+      margin-bottom: 5px;
+      color: #005792;
+    }
+    .status-box div p {
+      font-weight: bold;
+    }
+    form input, form button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    form button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    form button:hover {
+      background-color: #218838;
+    }
+    ul {
+      list-style: none;
+      margin-top: 10px;
+      padding-left: 0;
+    }
+    ul li {
+      background: #f1f1f1;
+      padding: 10px;
+      margin: 10px 0;
+      border-left: 5px solid #dc3545;
+      border-radius: 6px;
+      position: relative;
+    }
+    ul li button {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      background: none;
+      border: none;
+      color: red;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    @media(max-width: 600px) {
+      .status-box {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>🇮🇳 Indian Expense Tracker</h1>
+    <p class="subheading">Track your monthly expenses & remaining balance in INR</p>
+
+    <section class="income-section">
+      <form id="income-form">
+        <label for="income">Set Monthly Income (₹):</label>
+        <input type="number" id="income" placeholder="e.g. 25000" required />
+        <button type="submit">Save Income</button>
+      </form>
+    </section>
+
+    <section class="status-box">
+      <div>
+        <h4>Monthly Income</h4>
+        <p>₹<span id="monthly-income">0</span></p>
+      </div>
+      <div>
+        <h4>Total Spent</h4>
+        <p>₹<span id="total-expense">0</span></p>
+      </div>
+      <div>
+        <h4>Remaining</h4>
+        <p>₹<span id="remaining">0</span></p>
+      </div>
+    </section>
+
+    <section class="expense-form-section">
+      <h3>Add Expense</h3>
+      <form id="expense-form">
+        <input type="text" id="desc" placeholder="Expense description (e.g. Rent, Grocery)" required />
+        <input type="number" id="amt" placeholder="Amount in ₹" required />
+        <button type="submit">Add Expense</button>
+      </form>
+    </section>
+
+    <section class="history-section">
+      <h3>Expense History</h3>
+      <ul id="expense-list"></ul>
+    </section>
+  </div>
+
+  <script>
+    const incomeForm = document.getElementById('income-form');
+    const expenseForm = document.getElementById('expense-form');
+    const incomeInput = document.getElementById('income');
+    const descInput = document.getElementById('desc');
+    const amtInput = document.getElementById('amt');
+    const incomeDisplay = document.getElementById('monthly-income');
+    const expenseDisplay = document.getElementById('total-expense');
+    const remainingDisplay = document.getElementById('remaining');
+    const expenseList = document.getElementById('expense-list');
+
+    let income = JSON.parse(localStorage.getItem('monthlyIncome')) || 0;
+    let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+
+    function updateDisplay() {
+      const totalExpense = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+      incomeDisplay.textContent = income;
+      expenseDisplay.textContent = totalExpense;
+      remainingDisplay.textContent = income - totalExpense;
+    }
+
+    function renderExpenses() {
+      expenseList.innerHTML = '';
+      expenses.forEach((exp, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          ${exp.description} - ₹${exp.amount}
+          <button onclick="deleteExpense(${index})">x</button>
+        `;
+        expenseList.appendChild(li);
+      });
+    }
+
+    function deleteExpense(index) {
+      expenses.splice(index, 1);
+      localStorage.setItem('expenses', JSON.stringify(expenses));
+      renderExpenses();
+      updateDisplay();
+    }
+
+    incomeForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      income = parseFloat(incomeInput.value);
+      localStorage.setItem('monthlyIncome', JSON.stringify(income));
+      updateDisplay();
+      incomeInput.value = '';
+    });
+
+    expenseForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const description = descInput.value;
+      const amount = parseFloat(amtInput.value);
+      if (description && amount > 0) {
+        expenses.push({ description, amount });
+        localStorage.setItem('expenses', JSON.stringify(expenses));
+        renderExpenses();
+        updateDisplay();
+        descInput.value = '';
+        amtInput.value = '';
+      }
+    });
+
+    // Initial Load
+    updateDisplay();
+    renderExpenses();
+  </script>
+</body>
+</html>

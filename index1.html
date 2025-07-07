@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Confirm Box</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #confirmBox {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    #confirmBox button {
+      margin: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<h2>JavaScript Confirm Box</h2>
+
+<button onclick="showConfirmBox()">Try it</button>
+
+<p id="demo"></p>
+
+<!-- Custom Modal Box -->
+<div id="overlay">
+  <div id="confirmBox">
+    <p>Press a button!</p>
+    <button onclick="confirmResult(true)">OK</button>
+    <button onclick="confirmResult(false)">Cancel</button>
+  </div>
+</div>
+
+<script>
+function showConfirmBox() {
+  document.getElementById("overlay").style.display = "flex";
+}
+
+function confirmResult(isConfirmed) {
+  document.getElementById("demo") .innerText = isConfirmed
+    ? "You pressed OK!"
+    : "You pressed Cancel!";
+  document.getElementById("overlay").style.display = "none";
+}
+</script>
+
+</body>
+</html>

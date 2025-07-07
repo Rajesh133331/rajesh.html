@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        input{
+            width: 250px;
+            height: 30px;
+        }
+        table{
+        border-collapse: collapse;
+        width: 100%;
+    }
+    tr,th,td{
+        border:2px solid #dddddd;
+        padding: 15px;
+        text-align: center;
+    }
+    </style>
+</head>
+<body>
+    <input type="tel" placeholder="phone number" id="num" autocomplete="off">
+    <input type="submit" onclick="details()"><br><br><br>
+     <div id="table"><br><br><br><br>
+        <table>
+        <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Date of birth</th>
+        <th>email id</th>
+        <th>phone number</th>
+        </tr>
+        <td id="val1"></td>
+        <td id="val2"></td>
+        <td id="val3"></td>
+        <td id="val4"></td>
+        <td id="val5"></td>
+        </table><br>
+        <p id="demo"></p>
+
+    </div>
+    <script>
+            document.getElementById("num").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        details();
+    }
+});
+        function details()
+        {
+            const num = document.getElementById("num").value;
+            const values = localStorage.getItem(num);
+        if(values !==null)
+        {
+            const parse = JSON.parse(values);
+            document.getElementById("val1").innerHTML=parse.first_name;
+            document.getElementById("val2").innerHTML=parse.last_name;
+            document.getElementById("val3").innerHTML=parse.dob;
+            document.getElementById("val4").innerHTML=parse.mail;
+            document.getElementById("val5").innerHTML=parse.phn;
+            document.getElementById("demo").innerHTML ="✅ payment successfully paid";
+            document.getElementById("num").disabled = true;
+
+        }
+        else{
+            window.alert("user is not available")
+        }
+
+        }
+    </script>
+</body>
+</html>
