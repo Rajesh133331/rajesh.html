@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hostel Management System</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background: #f5f5f5; }
+    h2, h3 { color: #333; }
+    form, table, .content-section { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    input, button, select { padding: 8px; margin: 5px; border-radius: 4px; border: 1px solid #ccc; }
+    button { background: #4CAF50; color: white; cursor: pointer; }
+    button:hover { background: #45a049; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    nav a { margin-right: 25px; text-decoration: none; color: #007BFF; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    .hidden { display: none; }
+    .verify-name { color: green; margin-left: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>🏨 Hostel Management System</h2>
+  <nav>
+    <a href="#" onclick="showSection('addMember')">Add Member</a>
+    <a href="#" onclick="showSection('memberList')">Member List</a>
+    <a href="#" onclick="showSection('payment')">Manage Payment</a>
+    <a href="#" onclick="showSection('roomCount')">Room-wise Members</a>
+    <a href="#" onclick="showSection('dayWise')">Day-wise Members</a>
+    <a href="#" onclick="showSection('monthPayments')">Month-wise Payments</a>
+    <a href="#" onclick="showSection('pendingMembers')">Pending Members</a>
+  </nav>
+
+  <!-- Add Member Section -->
+  <div id="addMember" class="content-section">
+    <h3>Add / Update Member</h3>
+    <form id="memberForm" autocomplete="off">
+      <input type="hidden" id="memberId">
+      <input type="text" id="name" placeholder="Name" required autocomplete="off">
+      <input type="text" id="room" placeholder="Room" required autocomplete="off">
+      <input type="text" id="branch" placeholder="Branch" required autocomplete="off">
+      <input type="text" id="college" placeholder="College" required autocomplete="off">
+      <input type="date" id="joiningDate" placeholder="Joining Date" required autocomplete="off">
+      <input type="text" id="phone" placeholder="Phone" required autocomplete="off">
+      <button type="submit">Add Member</button>
+    </form>
+  </div>
+
+  <!-- Member List Section -->
+  <div id="memberList" class="content-section hidden">
+    <h3>All Members</h3>
+    <table id="memberTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Room</th>
+          <th>Branch</th>
+          <th>College</th>
+          <th>Joining Date</th>
+          <th>Phone</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- Payment Section -->
+  <div id="payment" class="content-section hidden">
+    <h3>Add Payment</h3>
+    <form id="paymentForm" autocomplete="off">
+      <input type="text" id="payPhone" placeholder="Phone Number" required oninput="showMemberName()" autocomplete="off">
+      <span id="verifyName" class="verify-name"></span><br>
+      <select id="month" required>
+        <option value="">Select Month</option>
+        <option>January</option>
+        <option>February</option>
+        <option>March</option>
+        <option>April</option>
+        <option>May</option>
+        <option>June</option>
+        <option>July</option>
+        <option>August</option>
+        <option>September</option>
+        <option>October</option>
+        <option>November</option>
+        <option>December</option>
+      </select>
+      <input type="date" id="paymentDate" placeholder="Payment Date" required autocomplete="off">
+      <input type="number" id="amount" placeholder="Amount" required autocomplete="off">
+      <input type="text" id="txnId" placeholder="Transaction ID" required autocomplete="off">
+      <select id="modeofpayment">
+        <option>Mode Of payment</option>
+        <option>Cash</option>
+        <option>Upi</option>
+    </select>
+      <button type="submit">Add Payment</button>
+    </form>
+
+    <h3>Fetch Payment History</h3>
+    <input type="text" id="searchPhone" placeholder="Enter Phone Number" autocomplete="off">
+    <button onclick="fetchPaymentHistory()">Fetch History</button>
+    <ul id="paymentHistory"></ul>
+  </div>
+
+  <!-- Room-wise Members Section -->
+  <div id="roomCount" class="content-section hidden">
+    <h3>Room-wise Members and Details</h3>
+    <select id="roomSelect" onchange="showRoomMembers()">
+      <option value="">Select Room</option>
+    </select>
+    <p id="roomCountResult"></p>
+    <ul id="roomMemberList"></ul>
+  </div>
+
+  <!-- Day-wise Members Section -->
+  <div id="dayWise" class="content-section hidden">
+    <h3>Day-wise Members</h3>
+    <select id="daySelect" onchange="showDayWiseMembers()">
+      <option value="">Select Day</option>
+    </select>
+    <ul id="dayWiseList"></ul>
+  </div>
+
+  <!-- Month-wise Payments Section -->
+  <div id="monthPayments" class="content-section hidden">
+    <h3>Month-wise Payments</h3>
+    <select id="paymentMonthSelect" onchange="showMonthPayments()">
+      <option value="">Select Month</option>
+      <option>January</option>
+      <option>February</option>
+      <option>March</option>
+      <option>April</option>
+      <option>May</option>
+      <option>June</option>
+      <option>July</option>
+      <option>August</option>
+      <option>September</option>
+      <option>October</option>
+      <option>November</option>
+      <option>December</option>
+    </select>
+    <table id="monthPaymentTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Amount</th>
+          <th>Txn ID</th>
+          <th>Payment Date</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <p id="totalAmount"></p>
+  </div>
+
+  <!-- Pending Members Section -->
+  <div id="pendingMembers" class="content-section hidden">
+    <h3>Pending Members (Not Paid)</h3>
+    <select id="pendingMonthSelect" onchange="showPendingMembers()">
+      <option value="">Select Month</option>
+      <option>January</option>
+      <option>February</option>
+      <option>March</option>
+      <option>April</option>
+      <option>May</option>
+      <option>June</option>
+      <option>July</option>
+      <option>August</option>
+      <option>September</option>
+      <option>October</option>
+      <option>November</option>
+      <option>December</option>
+    </select>
+    <ul id="pendingMemberList"></ul>
+  </div>
+
+  <script>
+    let members = JSON.parse(localStorage.getItem("members")) || [];
+
+    function saveMembers() {
+      localStorage.setItem("members", JSON.stringify(members));
+    }
+
+    function renderMembers() {
+      const tbody = document.querySelector("#memberTable tbody");
+      tbody.innerHTML = "";
+      const rooms = new Set();
+
+      members.forEach(member => {
+        rooms.add(member.room);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${member.name}</td>
+          <td>${member.room}</td>
+          <td>${member.branch}</td>
+          <td>${member.college}</td>
+          <td>${member.joiningDate}</td>
+          <td>${member.phone}</td>
+          <td>
+            <button onclick="editMember('${member.id}')">Edit</button>
+            <button onclick="deleteMember('${member.id}')">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const roomSelect = document.getElementById("roomSelect");
+      roomSelect.innerHTML = '<option value="">Select Room</option>';
+      [...rooms].forEach(room => {
+        const opt = document.createElement("option");
+        opt.value = room;
+        opt.textContent = room;
+        roomSelect.appendChild(opt);
+      });
+
+      const daySelect = document.getElementById("daySelect");
+      daySelect.innerHTML = '<option value="">Select Day</option>';
+      for (let i = 1; i <= 31; i++) {
+        const opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = i;
+        daySelect.appendChild(opt);
+      }
+    }
+
+    document.getElementById("memberForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const idField = document.getElementById("memberId");
+      const name = document.getElementById("name").value;
+      const room = document.getElementById("room").value;
+      const branch = document.getElementById("branch").value;
+      const college = document.getElementById("college").value;
+      const joiningDate = document.getElementById("joiningDate").value;
+      const phone = document.getElementById("phone").value;
+      const id = idField.value || "m" + new Date().getTime();
+
+      if (idField.value) {
+        members = members.map(m => m.id === id ? { ...m, name, room, branch, college, joiningDate, phone } : m);
+        idField.value = "";
+        this.querySelector("button").innerText = "Add Member";
+      } else {
+        members.push({ id, name, room, branch, college, joiningDate, phone, payments: [] });
+      }
+
+      saveMembers();
+      renderMembers();
+      this.reset();
+    });
+
+    function editMember(id) {
+      const member = members.find(m => m.id === id);
+      document.getElementById("memberId").value = member.id;
+      document.getElementById("name").value = member.name;
+      document.getElementById("room").value = member.room;
+      document.getElementById("branch").value = member.branch;
+      document.getElementById("college").value = member.college;
+      document.getElementById("joiningDate").value = member.joiningDate;
+      document.getElementById("phone").value = member.phone;
+      document.querySelector("#memberForm button").innerText = "Update Member";
+      showSection('addMember');
+    }
+
+    function deleteMember(id) {
+      if (confirm("Are you sure to delete?")) {
+        members = members.filter(m => m.id !== id);
+        saveMembers();
+        renderMembers();
+      }
+    }
+
+    document.getElementById("paymentForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const phone = document.getElementById("payPhone").value;
+      const month = document.getElementById("month").value;
+      const paymentDate = document.getElementById("paymentDate").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+      const txnId = document.getElementById("txnId").value;
+
+      const member = members.find(m => m.phone === phone);
+      if (member) {
+        member.payments.push({ month, paymentDate, amount, txnId });
+        saveMembers();
+        alert("Payment added successfully!");
+        this.reset();
+        document.getElementById("verifyName").textContent = "";
+      } else {
+        alert("Member not found with this phone number.");
+      }
+    });
+
+    function fetchPaymentHistory() {
+      const phone = document.getElementById("searchPhone").value;
+      const member = members.find(m => m.phone === phone);
+      const ul = document.getElementById("paymentHistory");
+      ul.innerHTML = "";
+
+      if (member && member.payments.length > 0) {
+        member.payments.forEach(p => {
+          const li = document.createElement("li");
+          li.textContent = `Month: ${p.month}, Date: ${p.paymentDate}, Amount: ${p.amount}, Txn ID: ${p.txnId}`;
+          ul.appendChild(li);
+        });
+        const liTotal = document.createElement("li");
+        liTotal.textContent = `Total payments done: ${member.payments.length}`;
+        ul.appendChild(liTotal);
+      } else if (member) {
+        const li = document.createElement("li");
+        li.textContent = "No payments found for this member.";
+        ul.appendChild(li);
+      } else {
+        const li = document.createElement("li");
+        li.textContent = "Member not found.";
+        ul.appendChild(li);
+      }
+    }
+
+    function showMemberName() {
+      const phone = document.getElementById("payPhone").value;
+      const member = members.find(m => m.phone === phone);
+      const span = document.getElementById("verifyName");
+      if (member) {
+        span.textContent = `Name: ${member.name}`;
+      } else {
+        span.textContent = "";
+      }
+    }
+
+    function showRoomMembers() {
+      const room = document.getElementById("roomSelect").value;
+      const ul = document.getElementById("roomMemberList");
+      ul.innerHTML = "";
+      const roomMembers = members.filter(m => m.room === room);
+      document.getElementById("roomCountResult").textContent = room ? `Total members: ${roomMembers.length}` : "";
+
+      roomMembers.forEach(m => {
+        const li = document.createElement("li");
+        li.textContent = `${m.name} (Phone: ${m.phone}, Branch: ${m.branch}, College: ${m.college}, Joining: ${m.joiningDate})`;
+        ul.appendChild(li);
+      });
+    }
+
+    function showDayWiseMembers() {
+      const day = document.getElementById("daySelect").value;
+      const ul = document.getElementById("dayWiseList");
+      ul.innerHTML = "";
+
+      if (day) {
+        const filtered = members.filter(m => {
+          const joinDay = new Date(m.joiningDate).getDate();
+          return joinDay == day;
+        });
+
+        if (filtered.length > 0) {
+          filtered.forEach(m => {
+            const li = document.createElement("li");
+            li.textContent = `${m.name} (Phone: ${m.phone}, Joining: ${m.joiningDate})`;
+            ul.appendChild(li);
+          });
+        } else {
+          const li = document.createElement("li");
+          li.textContent = "No members found for this day.";
+          ul.appendChild(li);
+        }
+      }
+    }
+
+    function showMonthPayments() {
+      const month = document.getElementById("paymentMonthSelect").value;
+      const tbody = document.querySelector("#monthPaymentTable tbody");
+      tbody.innerHTML = "";
+      let totalAmount = 0;
+
+      if (month) {
+        members.forEach(m => {
+          m.payments.forEach(p => {
+            if (p.month === month) {
+              const tr = document.createElement("tr");
+              tr.innerHTML = `
+                <td>${m.name}</td>
+                <td>${m.phone}</td>
+                <td>${p.amount}</td>
+                <td>${p.txnId}</td>
+                <td>${p.paymentDate}</td>
+              `;
+              tbody.appendChild(tr);
+              totalAmount += p.amount;
+            }
+          });
+        });
+      }
+
+      document.getElementById("totalAmount").textContent = `Total amount received in ${month}: ₹${totalAmount}`;
+    }
+
+    function showPendingMembers() {
+      const month = document.getElementById("pendingMonthSelect").value;
+      const ul = document.getElementById("pendingMemberList");
+      ul.innerHTML = "";
+
+      if (month) {
+        const monthOrder = ["January", "February", "March", "April", "May", "June",
+                            "July", "August", "September", "October", "November", "December"];
+        const selectedMonthIndex = monthOrder.indexOf(month);
+
+        const pending = members.filter(m => {
+          const joinMonthIndex = new Date(m.joiningDate).getMonth();
+          if (joinMonthIndex > selectedMonthIndex) {
+            return false;
+          }
+          return !m.payments.some(p => p.month === month);
+        });
+
+        if (pending.length > 0) {
+          pending.forEach(m => {
+            const li = document.createElement("li");
+            li.textContent = `${m.name} (Phone: ${m.phone}, Room: ${m.room}, Branch: ${m.branch}, College: ${m.college}, Joining: ${m.joiningDate})`;
+            ul.appendChild(li);
+          });
+        } else {
+          const li = document.createElement("li");
+          li.textContent = "All members have paid for this month.";
+          ul.appendChild(li);
+        }
+      }
+    }
+
+    function showSection(sectionId) {
+      document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.add('hidden');
+      });
+      document.getElementById(sectionId).classList.remove('hidden');
+    }
+
+    renderMembers();
+  </script>
+</body>
+</html>
